@@ -1,4 +1,4 @@
-FROM ruby:2.7
+FROM ruby:3
 
 LABEL "com.github.actions.name"="Danger"
 LABEL "com.github.actions.description"="Runs danger in a docker container such as GitHub Actions"
@@ -18,8 +18,8 @@ RUN mkdir /myapp
 WORKDIR /myapp
 COPY . /myapp
 
-RUN gem install bundler
-
-ENV BUNDLE_GEMFILE=/myapp/Gemfile
-RUN bundle install
-ENTRYPOINT ["bundle", "exec", "danger"]
+RUN gem build 
+RUN gem install danger*.gem danger-gitlab
+ENV GITLAB_API_HTTPARTY_OPTIONS="{verify: false}"
+RUN danger --version
+cmd ["danger"]
